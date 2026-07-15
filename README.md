@@ -1,12 +1,126 @@
 # Data Preprocessing - Election Result Portugal 2019
 The task which were doing as the group during the course at ICTAK TVM.
 
-Things should be included in this :
+Objectives
+
+The main objectives of this preprocessing project are to:
+
+Understand the dataset structure.
+Identify missing or inconsistent values.
+Detect duplicate records.
+Analyze the distribution of numerical and categorical variables.
+Identify outliers.
+Prepare the dataset for further statistical analysis and machine learning.
+
+
+Preprocessing Steps Performed
+
+1. Import Required Libraries
+
+Imported Python libraries required for data manipulation and visualization:
+
+Pandas
+NumPy
+Matplotlib
+Seaborn
+
+2. Load the Dataset
+
+The dataset was loaded into a Pandas DataFrame for analysis.
+
   - source of the dataset
-  - data understanding inferences
-  - the steps we are taking
-    
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  https://archive.ics.uci.edu/dataset/513/real+time+election+results+portugal+2019
+
+3. Initial Data Exploration
+
+The following methods were used:
+
+head()
+shape
+info()
+describe()
+
+These provided an overview of:
+
+Number of rows and columns
+Data types
+Basic statistical summary
+Dataset structure
+
+
+4. Missing Value Analysis
+
+Purpose:
+
+Identify incomplete records
+Decide appropriate strategies for handling missing values
+
+5. Duplicate Record Detection
+
+Removing duplicates helps improve data quality and avoids bias in later analyses.
+
+6. Data Type Verification
+
+Verified that every feature has the appropriate data type.
+
+Examples:
+
+Numerical columns → Integer / Float
+Categorical columns → Object
+
+Correct data types are essential for preprocessing and modeling.
+
+7. Statistical Summary
+
+Generated descriptive statistics including:
+
+Mean
+Median
+Standard Deviation
+Minimum
+Maximum
+Quartiles
+
+This helped understand the overall distribution of numerical variables.
+
+8. Outlier Detection
+
+Outliers were detected using Boxplots.
+
+Purpose:
+
+Identify unusually high or low values.
+Determine whether further outlier treatment is required.
+9. Data Visualization
+
+Visualizations were created to better understand the data.
+
+These include:
+
+Histograms
+Boxplots
+Scatter Plots
+
+The visualizations helped identify:
+
+Distribution of numerical variables
+Relationships between variables
+Possible outliers
+Trends within election data
+
+Observations
+
+During preprocessing, the following observations were made:
+
+The dataset contains both numerical and categorical variables.
+Some columns contain missing values.
+A small number of duplicate records may exist.
+Certain numerical features contain outliers.
+Scatter plots reveal relationships between voting statistics and election outcomes.
+Most preprocessing tasks improve the quality and reliability of the dataset for future analysis.
+
+
+######################################################################################################################################################################
 
 
 # Outlier Handling - Election Result Portugal 2019
