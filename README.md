@@ -1,5 +1,4 @@
 # Data Preprocessing - Election Result Portugal 2019
-The task which were doing as the group during the course at ICTAK TVM.
 
 ## Objectives
 
@@ -154,4 +153,20 @@ Most preprocessing tasks improve the quality and reliability of the dataset for 
   - Mean = 0
   - Standard Deviation = 1
 - Compared feature values before and after scaling.
-###########################################################################################################################################################################3
+##########################################################################################################################################################################
+
+### Encoding Categorical Columns
+
+- Categorical features remaining in the `X` DataFrame (`'territoryName'`, `'Party'`) were converted into numerical format using One-Hot Encoding.
+- The `time` column, which was an object type and had high cardinality (many unique timestamps), was dropped from `X` as its granular nature was deemed less relevant for the prediction task and would have created an excessive number of features if one-hot encoded.
+- `OneHotEncoder(sparse_output=False)` was used to create new binary columns for each unique category, ensuring the output is a dense array that is easier to work with.
+
+### Final Data State
+
+After all these preprocessing steps, the dataset is split into:
+
+-   **`X` (Features)**: A DataFrame containing all the processed numerical and one-hot encoded categorical features, ready for model training. The `time` column has been removed, and `territoryName` and `Party` have been one-hot encoded.
+-   **`y` (Target)**: A Series containing the `FinalMandates` which is the target variable for the regression task.
+
+This preprocessed data is now suitable for building and evaluating a regression model.
+
