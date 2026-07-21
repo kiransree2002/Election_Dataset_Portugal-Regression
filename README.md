@@ -1,174 +1,95 @@
-# Data Preprocessing - Election Result Portugal 2019
+## Project Overview: Election Dataset Portugal - Regression
 
-## Objectives
+This notebook details a machine learning project focused on predicting `FinalMandates` using the Real-Time Election Results Portugal 2019 dataset. The process involves comprehensive data preprocessing, feature engineering, and the implementation and evaluation of various regression models, particularly focusing on the K-Nearest Neighbors (KNN) Regressor.
 
-The main objectives of this preprocessing project are to:
+### Objectives
 
-Understand the dataset structure.
-Identify missing or inconsistent values.
-Detect duplicate records.
-Analyze the distribution of numerical and categorical variables.
-Identify outliers.
-Prepare the dataset for further statistical analysis and machine learning.
+- Understand the dataset structure.
+- Identify and handle missing or inconsistent values.
+- Detect and address duplicate records.
+- Analyze the distribution of numerical and categorical variables.
+- Identify and manage outliers.
+- Prepare the dataset for statistical analysis and machine learning.
+- Build and evaluate regression models to predict `FinalMandates`.
 
+### Preprocessing Steps Performed
 
-## Preprocessing Steps Performed
+#### 1. Data Loading & Initial Exploration
+- Dataset loaded from `/content/drive/MyDrive/ICT - Ai Ml/DataPreprocessing - Group 1/Data/ElectionData.csv`.
+- Initial checks performed using `head()`, `shape`, `info()`, and `describe()` to understand data types, dimensions, and basic statistics.
 
-### -  Import Required Libraries
+#### 2. Missing Value & Duplicate Handling
+- **Missing Values**: Checked using `isnull().sum()`. *No missing values were found*.
+- **Duplicate Records**: Checked using `duplicated().sum()`. *No duplicate records were found*.
 
-Imported Python libraries required for data manipulation and visualization:
+#### 3. Outlier Detection & Handling
+- Outliers were identified using **Boxplots** for numerical features.
+- **IQR method** was applied to quantify outliers for each numerical column.
+- *Decision*: Outliers were identified but **not removed** or clipped, as they were deemed potentially representative of real-world variations in election data (e.g., large vote counts in major territories/parties).
 
-Pandas
-NumPy
-Matplotlib
-Seaborn
+#### 4. Data Visualization (EDA)
+- **Countplot**: Visualized the distribution of political parties (`Party`).
+- **Histograms**: Displayed distributions of numerical features to understand their spread and skewness.
+- **Boxplots**: Used to visualize the distribution and identify outliers in numerical features.
+- **Scatterplots**: Plotted relationships between numerical features and the target variable (`FinalMandates`) to understand correlations.
 
-### -  Load the Dataset
+#### 5. Feature Engineering
+- **Correlation Analysis**: Calculated Pearson correlation matrix for numerical features.
+- **Correlation Heatmap**: Visualized correlations to identify highly correlated features.
+- **Mutual Information**: Calculated Mutual Information (MI) scores between features and `FinalMandates` to determine feature importance.
+- **Feature Removal**: 
+    - Highly correlated features (`Hondt`, `Mandates`) were removed to reduce multicollinearity.
+    - Low mutual information and low correlation features (`TimeElapsed`, `blankVotesPercentage`, `pre.blankVotesPercentage`, `nullVotesPercentage`, `pre.nullVotesPercentage`) were removed.
+    - The `time` column was dropped due to high cardinality and its limited relevance to election outcomes.
 
-The dataset was loaded into a Pandas DataFrame for analysis.
+#### 6. Feature Scaling
+- **Standard Scaling**: `StandardScaler` was applied to all remaining numerical features (both `int64` and `float64` types) to standardize their ranges (mean=0, standard deviation=1).
 
-  - source of the dataset
+#### 7. Encoding Categorical Columns
+- **One-Hot Encoding**: Categorical features (`territoryName`, `Party`) were converted into numerical format using `OneHotEncoder(sparse_output=False)`.
 
-  https://archive.ics.uci.edu/dataset/513/real+time+election+results+portugal+2019
+### Model Building
 
-### -  Initial Data Exploration
+#### 1. Train-Test Split
+- The preprocessed data `X` (features) and `y` (target: `FinalMandates`) were split into training and testing sets with a `test_size` of 0.2 and `random_state=33`.
 
-The following methods were used:
+#### 2. K-Nearest Neighbors (KNN) Regressor
+- **Baseline KNN Model**: Trained a `KNeighborsRegressor` on the `X_train` and `y_train`.
+- **Boosting with KNN**: An `AdaBoostRegressor` was implemented using `KNeighborsRegressor` as the base estimator.
+- **Cross-Validation (K-Fold)**: `KFold` cross-validation with 4 splits (`n_splits=4`, `shuffle=True`, `random_state=33`) was applied to the `KNeighborsRegressor`.
+- **Hyperparameter Tuning (Grid Search CV)**: `GridSearchCV` was used to find optimal hyperparameters (`n_neighbors`, `weights`) for `KNeighborsRegressor`.
+- **Hyperparameter Tuning (Randomized Search CV)**: `RandomizedSearchCV` was used for a broader search of hyperparameters (`n_neighbors`, `weights`, `p`) for `KNeighborsRegressor`.
 
-head()
-shape
-info()
-describe()
+### Model Evaluation
 
-These provided an overview of:
+The models were evaluated using the following regression metrics:
+- **Mean Absolute Error (MAE)**
+- **Mean Squared Error (MSE)**
+- **R-squared (R²)**
 
-Number of rows and columns
-Data types
-Basic statistical summary
-Dataset structure
+#### KNN Regressor Evaluation:
+- **Baseline KNN Model**:
+    - MSE: 0.1363
+    - MAE: 0.0236
+    - R² Score: 0.9974
+- **Boosting KNN Regression Model**:
+    - MSE: 0.0002
+    - MAE: 0.0006
+    - R² Score: 0.99999
+- **KFold Cross-validation for KNN Regressor**:
+    - Cross validation scores: [99.75%, 99.96%, 99.88%, 99.74%]
+    - Mean of CV scores: 99.83%
+- **KNN Regressor (After Hyperparameter Tuning - Grid Search CV)**:
+    - Best Parameters: `{'n_neighbors': 3, 'weights': 'distance'}`
+    - Best CV Score: 0.9983
+    - MAE: 0.0023
+    - MSE: 0.0160
+    - R² Score: 0.9997
+- **KNN Regressor (Randomized Search CV)**:
+    - Best Parameters: `{'weights': 'distance', 'p': 1, 'n_neighbors': 3}`
+    - Best CV Score: 0.9983
+    - MAE: 0.0088
+    - MSE: 0.0261
+    - R² Score: 0.9995
 
-
-###  - Missing Value Analysis
-
-Purpose:
-
-Identify incomplete records
-Decide appropriate strategies for handling missing values
-
-###  - Duplicate Record Detection
-
-Removing duplicates helps improve data quality and avoids bias in later analyses.
-
-###  - Data Type Verification
-
-Verified that every feature has the appropriate data type.
-
-Examples:
-
-Numerical columns → Integer / Float
-Categorical columns → Object
-
-Correct data types are essential for preprocessing and modeling.
-
-###  - Statistical Summary
-
-Generated descriptive statistics including:
-
-Mean
-Median
-Standard Deviation
-Minimum
-Maximum
-Quartiles
-
-This helped understand the overall distribution of numerical variables.
-
-###  - Outlier Detection
-
-Outliers were detected using Boxplots.
-
-Purpose:
-
-Identify unusually high or low values.
-Determine whether further outlier treatment is required.
-
-###  - Data Visualization
-
-Visualizations were created to better understand the data.
-
-These include:
-
-Histograms
-Boxplots
-Scatter Plots
-
-The visualizations helped identify:
-
-Distribution of numerical variables
-Relationships between variables
-Possible outliers
-Trends within election data
-
-## Observations
-
-During preprocessing, the following observations were made:
-
-The dataset contains both numerical and categorical variables.
-Some columns contain missing values.
-A small number of duplicate records may exist.
-Certain numerical features contain outliers.
-Scatter plots reveal relationships between voting statistics and election outcomes.
-Most preprocessing tasks improve the quality and reliability of the dataset for future analysis.
-
-
--------------------------
-
-
-### Outlier Handling 
-   - first we have identified  the outlier using Boxplot.
-   - after finding outliers , we try to clip with IQR method
-   - finally ,again verify with Boxplot
-
--------------------------
-
-
-###  Correlation Analysis
-- Computed the Pearson correlation matrix for all numerical features.
-- Identified relationships between variables.
-### . Correlation Heatmap
-- Visualized the correlation matrix using a heatmap.
-- Used the heatmap to identify highly correlated features.
-### . Feature Selection using Correlation
-- Removed highly correlated features using a correlation threshold of **0.90**.
-- This helps reduce multicollinearity and improves model performance.
-### . Mutual Information
-- Calculated Mutual Information scores between each feature and the target variable (`FinalMandates`).
-- Ranked features according to their importance.
-### . Removing Low-Importance Features
-- Removed features with very low Mutual Information scores.
-- Retained only informative features for model training.
-- ### . Feature Scaling
-- Applied **StandardScaler** to numerical features.
-- Standardized features to have:
-  - Mean = 0
-  - Standard Deviation = 1
-- Compared feature values before and after scaling.
-
--------------------------
-
-
-### Encoding Categorical Columns
-
-- Categorical features remaining in the `X` DataFrame (`'territoryName'`, `'Party'`) were converted into numerical format using One-Hot Encoding.
-- The `time` column, which was an object type and had high cardinality (many unique timestamps), was dropped from `X` as its granular nature was deemed less relevant for the prediction task and would have created an excessive number of features if one-hot encoded.
-- `OneHotEncoder(sparse_output=False)` was used to create new binary columns for each unique category, ensuring the output is a dense array that is easier to work with.
-
-### Final Data State
-
-After all these preprocessing steps, the dataset is split into:
-
--   **`X` (Features)**: A DataFrame containing all the processed numerical and one-hot encoded categorical features, ready for model training. The `time` column has been removed, and `territoryName` and `Party` have been one-hot encoded.
--   **`y` (Target)**: A Series containing the `FinalMandates` which is the target variable for the regression task.
-
-This preprocessed data is now suitable for building and evaluating a regression model.
-
+*(Further models like SVM, Decision Tree, and Linear Regression are building....)*
