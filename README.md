@@ -48,7 +48,7 @@ This notebook details a machine learning project focused on predicting `FinalMan
 #### 7. Encoding Categorical Columns
 - **One-Hot Encoding**: Categorical features (`territoryName`, `Party`) were converted into numerical format using `OneHotEncoder(sparse_output=False)`.
 
-### Model Building
+# Model Building
 
 #### 1. Train-Test Split
 - The preprocessed data `X` (features) and `y` (target: `FinalMandates`) were split into training and testing sets with a `test_size` of 0.2 and `random_state=33`.
@@ -128,4 +128,22 @@ This notebook details a machine learning project focused on predicting `FinalMan
     - MSE: 0.3680
     - R² Score: 0.9929
 
-*(Further models like SVM are currently under construction.)*
+#### 5. SVM Model
+- **Baseline SVM Model**:
+    - MSE: 0.0043
+    - MAE: 0.0551
+    - R² Score: 0.9999
+- **Bagging with SVM**:
+    - MSE: 0.0069
+    - MAE: 0.0575
+    - R² Score: 0.9999
+- **Cross-Validation (K-Fold)**:
+    - Cross validation scores: [99.99%, 99.99%, 99.99%]
+    - Mean of CV Score: 99.99%
+- **Hyperparameter Tuning (Grid Search CV)**:
+    - Best Parameters: `{'C': 100, 'epsilon': 0.01, 'gamma': 'scale', 'kernel': 'rbf'}`
+    - Best R² score (CV): 0.9999
+- **Hyperparameter Tuning (Randomized Search CV)**:
+    - Best Parameters: `{'kernel': 'rbf', 'gamma': 'scale', 'epsilon': 0.01, 'C': 100}`
+    - Best R² score (CV): 0.9999
+
